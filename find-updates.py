@@ -4,9 +4,11 @@ import os
 import plistlib
 
 from operator import attrgetter
+from traceback import print_tb
 from typing import List
 
 from app import App, NoSparkleFeedURLException
+from termcolor import cprint
 
 def find_apps(dirs: List[str]) -> List[App]:
     for dir in dirs:
@@ -27,13 +29,26 @@ if __name__ == "__main__":
             continue
         try:
             if app.sparkle_feed().latest_version() > app.version():
-                print("{0}: {1} -> {2}".format(
+                cprint("{0}: {1} -> {2}".format(
                     app.name,
                     app.version(),
                     app.sparkle_feed().latest_version()
-                ))
+                ), attrs=['bold'])
+            elif app.sparkle_feed().latest_version() < app.version():
+                cprint("Hmm... you have version {1} of {0}, but sparkle only has {2}".format(
+                    app.name,
+                    app.version(),
+                    app.sparkle_feed().latest_version()
+                ), 'yellow')
+            else:
+                cprint("{0} is up to date (you have {1}, sparkle has {2})".format(
+                    app.name,
+                    app.version(),
+                    app.sparkle_feed().latest_version()
+                ), attrs=['dark'])
         except NoSparkleFeedURLException:
             # The app doesn't use Sparkle for updates. Ignore it.
             pass
         except Exception as e:
             print("{0}: Unexpected error: {1}".format(app.name, e))
+            print_tb(e.__traceback__)

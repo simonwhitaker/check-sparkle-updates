@@ -12,7 +12,10 @@ class TestSparkleVersion(unittest.TestCase):
             ('a.b', ['a', 'b']),
         ]
         for version, expected_parts in test_cases:
-            self.assertEqual(SparkleVersion(version).version_parts(), expected_parts)
+            self.assertEqual(
+                SparkleVersion(version).version_parts(),
+                expected_parts
+            )
 
     def test_sorting_by_version(self):
         test_cases = [
