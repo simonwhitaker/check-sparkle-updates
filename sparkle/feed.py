@@ -5,6 +5,7 @@ from typing import List
 
 from sparkle.version import SparkleVersion
 
+
 class SparkleEntry(object):
     def __init__(self, entry):
         self.entry = entry
@@ -13,6 +14,7 @@ class SparkleEntry(object):
         # delta updates (see e.g. https://coderunnerapp.com/appcast.xml), but
         # they should all have the same sparkle:version, so just use the first.
         self.version = SparkleVersion(sparkle_links[0]['sparkle:version'])
+
 
 class SparkleFeed(object):
     def __init__(self, url: str):

@@ -5,6 +5,7 @@ from typing import Any, Dict
 
 from sparkle import SparkleFeed
 
+
 class App(object):
     def __init__(self, path: str):
         self.path = path
@@ -32,6 +33,7 @@ class App(object):
 
     def version(self) -> str:
         return self.info()['CFBundleVersion']
+
 
 class NoSparkleFeedURLException(Exception):
     pass

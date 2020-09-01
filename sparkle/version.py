@@ -1,7 +1,8 @@
 import re
 
 from functools import total_ordering
-from typing import List;
+from typing import List
+
 
 @total_ordering
 class SparkleVersion(object):

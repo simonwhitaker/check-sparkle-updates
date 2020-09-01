@@ -2,6 +2,7 @@ import unittest
 
 from sparkle.version import SparkleVersion
 
+
 class TestSparkleVersion(unittest.TestCase):
     def test_version_parts(self):
         test_cases = [
@@ -29,6 +30,7 @@ class TestSparkleVersion(unittest.TestCase):
             sv = sorted(sv)
             sv = [v.version_string for v in sv]
             self.assertEqual(sv, expected)
+
 
 if __name__ == "__main__":
     unittest.main()

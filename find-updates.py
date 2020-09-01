@@ -10,11 +10,13 @@ from typing import List
 from app import App, NoSparkleFeedURLException
 from termcolor import cprint
 
+
 def find_apps(dirs: List[str]) -> List[App]:
     for dir in dirs:
         for f in os.listdir(dir):
             if f.endswith('.app'):
                 yield App(os.path.join(dir, f))
+
 
 if __name__ == "__main__":
     apps = find_apps([
@@ -36,16 +38,14 @@ if __name__ == "__main__":
                 ), attrs=['bold'])
             elif app.sparkle_feed().latest_version() < app.version():
                 cprint("Hmm... you have version {1} of {0}, but sparkle only has {2}".format(
-                    app.name,
-                    app.version(),
-                    app.sparkle_feed().latest_version()
-                ), 'yellow')
+                    app.name, app.version(), app.sparkle_feed().latest_version()), 'yellow')
             else:
-                cprint("{0} is up to date (you have {1}, sparkle has {2})".format(
-                    app.name,
-                    app.version(),
-                    app.sparkle_feed().latest_version()
-                ), attrs=['dark'])
+                cprint(
+                    "{0} is up to date (you have {1}, sparkle has {2})".format(
+                        app.name,
+                        app.version(),
+                        app.sparkle_feed().latest_version()),
+                    attrs=['dark'])
         except NoSparkleFeedURLException:
             # The app doesn't use Sparkle for updates. Ignore it.
             pass
