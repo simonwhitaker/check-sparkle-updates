@@ -33,7 +33,10 @@ class SparkleFeed(object):
         return self._payload
 
     def entries(self) -> List[SparkleEntry]:
-        return [SparkleEntry(e) for e in self.payload().entries if any(
+        payload = self.payload()
+        if payload is None:
+            return []
+        return [SparkleEntry(e) for e in payload.entries if any(
             ['sparkle:version' in link for link in e.links]
         )]
 
