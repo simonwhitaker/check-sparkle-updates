@@ -4,7 +4,7 @@ import os
 import plistlib
 
 from operator import attrgetter
-from typing import Any, Dict, List;
+from typing import List
 
 from app import App, NoSparkleFeedURLException
 
@@ -26,13 +26,11 @@ if __name__ == "__main__":
             # TODO: add timeout support when fetching RSS feeds
             continue
         try:
-            if app.version == app.sparkle_feed.latest_version:
-                print("{0} is up to date".format(app.name))
-            else:
+            if app.sparkle_feed().latest_version() > app.version():
                 print("{0}: {1} -> {2}".format(
                     app.name,
-                    app.version,
-                    app.sparkle_feed.latest_version
+                    app.version(),
+                    app.sparkle_feed().latest_version()
                 ))
         except NoSparkleFeedURLException:
             # The app doesn't use Sparkle for updates. Ignore it.

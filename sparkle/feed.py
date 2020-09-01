@@ -1,20 +1,31 @@
 import feedparser
 
+from operator import attrgetter
+from typing import List
+
+from sparkle.version import SparkleVersion
+
+class SparkleEntry(object):
+    def __init__(self, entry):
+        self.entry = entry
+        self.version = SparkleVersion(self.entry.links[0]['sparkle:version'])
+
 class SparkleFeed(object):
     def __init__(self, url: str):
         self._url = url
         self._payload = None
+        self._entries = []
 
-    @property
     def payload(self) -> feedparser.FeedParserDict:
         if self._payload is None:
             self._payload = feedparser.parse(self._url)
         return self._payload
 
-    @property
+    def entries(self) -> List[SparkleEntry]:
+        return [SparkleEntry(e) for e in self.payload().entries if len(e.links) > 0]
+
     def latest_version(self) -> str:
-        entries = self.payload.entries
-        # TODO: sort by version string. Apps can provide their own version
-        # comparator function, but the default logic used by Sparkle is here:
-        # https://github.com/sparkle-project/Sparkle/blob/master/Sparkle/SUStandardVersionComparator.m
-        return entries[0].links[0]['sparkle:version']
+        sorted_entries = sorted(self.entries(), key=attrgetter('version'), reverse=True)
+        if len(sorted_entries) == 0:
+            return '0'
+        return sorted_entries[0].version.version_string
