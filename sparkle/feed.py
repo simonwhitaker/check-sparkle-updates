@@ -1,9 +1,14 @@
 import feedparser
+import ssl
 
 from operator import attrgetter
 from typing import List
 
 from sparkle.version import SparkleVersion
+
+# Fix SSL CERTIFICATE_VERIFY_FAILED errors for some hosts. See comment at
+# https://stackoverflow.com/a/44649450
+ssl._create_default_https_context = ssl._create_stdlib_context
 
 
 class SparkleEntry(object):
