@@ -30,21 +30,23 @@ if __name__ == "__main__":
             # TODO: add timeout support when fetching RSS feeds
             continue
         try:
-            if app.sparkle_feed().latest_version() > app.version():
+            local_version = app.version()
+            sparkle_version = app.sparkle_feed().latest_version()
+            if sparkle_version > local_version:
                 cprint("{0}: {1} -> {2}".format(
                     app.name,
-                    app.version(),
-                    app.sparkle_feed().latest_version()
+                    local_version,
+                    sparkle_version
                 ), attrs=['bold'])
-            elif app.sparkle_feed().latest_version() < app.version():
+            elif sparkle_version < local_version:
                 cprint("Hmm... you have version {1} of {0}, but sparkle only has {2}".format(
-                    app.name, app.version(), app.sparkle_feed().latest_version()), 'yellow')
+                    app.name, local_version, sparkle_version), 'yellow')
             else:
                 cprint(
                     "{0} is up to date (you have {1}, sparkle has {2})".format(
                         app.name,
-                        app.version(),
-                        app.sparkle_feed().latest_version()),
+                        local_version,
+                        sparkle_version),
                     attrs=['dark'])
         except NoSparkleFeedURLException:
             # The app doesn't use Sparkle for updates. Ignore it.
